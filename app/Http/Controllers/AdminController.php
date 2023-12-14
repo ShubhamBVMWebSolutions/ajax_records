@@ -41,7 +41,8 @@ class AdminController extends Controller
         $curr_Date = Carbon::createFromFormat('Y-m-d', $date)->format('m/d/Y');
         $dueDate = Carbon::createFromFormat('Y-m-d', $request->due_on);
         $existingRecord = Fees::where('student_id', $student_id)
-        ->where('due_date',$request->due_on)
+        ->whereYear('due_date',$dueDate->year)
+        ->whereMonth('due_date', $dueDate->month)
         ->first();
         if ($existingRecord) {
             return response()->json(['error' => 'A record with the same student and due date already exists']);
