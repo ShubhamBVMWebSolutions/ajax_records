@@ -82,15 +82,18 @@
       function fillTableWithData(studentData) {
         var tableBody = $('#student_details tbody');
         tableBody.empty();
+        var counter = 1;
         for (var i = 0; i < studentData.length; i++) {
           var row = '<tr>';
-          row += '<td>' + studentData[i].id + '</td>';
+          row += '<td>' + counter + '</td>';
           row += '<td>' + studentData[i].name + '</td>';
           row += '<td>' + studentData[i].age + '</td>';
           row += '<td><span class="tag tag-success">' + studentData[i].class + '</span></td>';
+          row += '<td>' + (studentData[i].last_deposit_date ? studentData[i].last_deposit_date : 'The Fees Is not Yet Being deposited') + '</td>';
           row += '<td><i class="fas fa-money-bill" style="cursor: pointer;" onclick="openModal(' + studentData[i].id + ', \'' + studentData[i].name + '\')"></i></td>';
           row += '</tr>';
           tableBody.append(row);
+          counter++;
         }
     }
 
@@ -130,7 +133,7 @@
                feeDetails += '</div>';
                feeDetails += '<div class="form-group col-md-3">';
                feeDetails += '<label for="deposit_on">Deposit Date:<span style="font-weight: 100;font-size:smaller;">(mm/dd/yyyy)</span></label>';
-               feeDetails += '<input type="date" class="form-control" name="deposit_on" value="' + fee.deposit_date + '"' + (fee.status == 1 ? 'disabled' : '') + '>';
+               feeDetails += '<input type="date" class="form-control" name="deposit_on" value="' + fee.deposit_date + '"' + (fee.status == 1 ? 'disabled' : '') + ' required>';
                feeDetails += '</div>';
                feeDetails += '<div class="form-group col-md-3" style="padding-top: 1px">';
                feeDetails += '<label for="checkbox">Checkbox:</label><br>';
@@ -158,9 +161,11 @@
                         success: function(response) {
                             if (response.error) {
                               alert(response.error);
-                              modal.find('input[name="deposit_on"]').val('');
-                            }else{
+                              // modal.find('input[name="deposit_on"]').val('');
                               openModal(currentStudentId,currentStudentName);
+                            }else{
+                              modal.modal('hide');
+                              fetchStudentData();
                             }
                           },
                         error: function(error) {

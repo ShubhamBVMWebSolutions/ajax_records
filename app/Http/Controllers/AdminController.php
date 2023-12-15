@@ -16,7 +16,8 @@ class AdminController extends Controller
     }
 
     function student_data(Request $request) {
-        $students = student::all();
+        $student = new student;
+        $students =$student->getStudentDataWithLastDeposit();
         return response()->json($students);
     }
 
@@ -84,4 +85,13 @@ class AdminController extends Controller
             return response()->json(['message' => 'Deposit record not found'], 404);
         }
     }
+
+    public function login(){
+        return view('login.login');
+    }
+
+    public function register(){
+        return view('login.register');
+    }
+
 }
