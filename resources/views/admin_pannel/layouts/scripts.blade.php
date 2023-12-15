@@ -99,12 +99,10 @@
         method:'GET',
         dataType:'json',
         success:function(response){
-          console.log(response.fees.length);
           modal.find('.modal-body').empty();
           if (response.message === 'Data Fetched successfully' && response.fees.length > 0) {
             modal.find('.modal-title').text('Fee Record of -: ' + studentName + '');
             $.each(response.fees,function (index , fee) {
-              console.log(fee);
               var feeDetails = '<div class="form-row">';
                feeDetails += '<input type="hidden" class="form-control" name="id" value="' + fee.id + '" >';
                feeDetails += '<div class="form-group col-md-3">';
