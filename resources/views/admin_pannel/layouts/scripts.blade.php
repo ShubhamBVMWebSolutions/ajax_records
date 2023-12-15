@@ -40,20 +40,12 @@
             data: formData,
             dataType: 'json',
             success: function(response) {
-                // Handle the success response
-                console.log(response);
-                alert(response.message); // You can customize this based on your response structure
-
-                // Optionally, reset the form after successful submission
+                alert(response.message); 
                 $('#student_detail_form')[0].reset();
                 $('#add_student').modal('hide');
                 fetchStudentData();
             },
             error: function(error) {
-                // Handle the error response
-                console.error('Error:', error);
-
-                // Optionally, display an error message to the user
                 alert('An error occurred. Please try again.');
             }
         });
@@ -92,7 +84,6 @@
         }
     }
 
-    // Call the function to fetch data and fill the table with data onload
     $(document).ready(function() {
       fetchStudentData();
     });
@@ -103,8 +94,6 @@
       var modal = $('#studentfees');
       currentStudentId = studentId;
       currentStudentName = studentName;
-      // modal.find('.modal-title').text('Fee Record of -: ' + studentName + '');
-      // modal.modal('show');
       $.ajax({
         url: '/fetch-fees/' + studentId,
         method:'GET',
@@ -156,7 +145,6 @@
                         success: function(response) {
                             if (response.error) {
                               alert(response.error);
-                              // modal.find('input[name="deposit_on"]').val('');
                               openModal(currentStudentId,currentStudentName);
                             }else{
                               modal.modal('hide');
@@ -164,7 +152,7 @@
                             }
                           },
                         error: function(error) {
-                        console.error('Error Updating data:', error);
+                      
                       }
                     });
                   });
@@ -172,11 +160,10 @@
             modal.find('.modal-title').text('Fee Record of -: ' + studentName + '');
             modal.modal('show');
           }else{
-            console.log("No Data Found ");
           }
         },
         error :function(error){
-          console.error('Error while finding the data',error);
+    
         }
       });
 }
@@ -230,9 +217,7 @@ function new_fess() {
           }
             },
       error: function(error) {
-        console.log(error);
                 alert(error.message);
-                console.error('Error saving data:', error);
             }
     });
   }
