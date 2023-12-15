@@ -29,6 +29,7 @@
 <!-- AdminLTE for demo purposes -->
 <script src="{{asset('AdminLTE/dist/js/demo.js')}}"></script>
 
+
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
 <script>
@@ -40,12 +41,17 @@
             data: formData,
             dataType: 'json',
             success: function(response) {
-                alert(response.message); 
+                // Handle the success response
+                alert(response.message); // You can customize this based on your response structure
+
+                // Optionally, reset the form after successful submission
                 $('#student_detail_form')[0].reset();
                 $('#add_student').modal('hide');
                 fetchStudentData();
             },
             error: function(error) {
+                // Handle the error response
+                // Optionally, display an error message to the user
                 alert('An error occurred. Please try again.');
             }
         });
@@ -61,7 +67,6 @@
               fillTableWithData(data);
             },
             error: function(error) {
-                console.error('Error fetching data:', error);
             }
         });
     }
@@ -84,6 +89,7 @@
         }
     }
 
+    // Call the function to fetch data and fill the table with data onload
     $(document).ready(function() {
       fetchStudentData();
     });
@@ -99,10 +105,12 @@
         method:'GET',
         dataType:'json',
         success:function(response){
+          
           modal.find('.modal-body').empty();
           if (response.message === 'Data Fetched successfully' && response.fees.length > 0) {
             modal.find('.modal-title').text('Fee Record of -: ' + studentName + '');
             $.each(response.fees,function (index , fee) {
+             
               var feeDetails = '<div class="form-row">';
                feeDetails += '<input type="hidden" class="form-control" name="id" value="' + fee.id + '" >';
                feeDetails += '<div class="form-group col-md-3">';
@@ -143,6 +151,7 @@
                         success: function(response) {
                             if (response.error) {
                               alert(response.error);
+                              // modal.find('input[name="deposit_on"]').val('');
                               openModal(currentStudentId,currentStudentName);
                             }else{
                               modal.modal('hide');
@@ -150,7 +159,7 @@
                             }
                           },
                         error: function(error) {
-                      
+                        
                       }
                     });
                   });
@@ -158,10 +167,11 @@
             modal.find('.modal-title').text('Fee Record of -: ' + studentName + '');
             modal.modal('show');
           }else{
+            
           }
         },
         error :function(error){
-    
+          
         }
       });
 }
@@ -215,7 +225,7 @@ function new_fess() {
           }
             },
       error: function(error) {
-                alert(error.message);
+       alert(error.message);
             }
     });
   }
