@@ -5,16 +5,16 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HomeController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+/*                                                                         /*
+|--------------------------------------------------------------------------|
+| Web Routes                                                               |
+|--------------------------------------------------------------------------|
+|--------------------------------------------------------------------------|
+| Here is where you can register web routes for your application. These    |
+| routes are loaded by the RouteServiceProvider and all of them will       |
+| be assigned to the "web" middleware group. Make something great!         |
+|--------------------------------------------------------------------------|
+*/                                                                        
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -26,14 +26,20 @@ Route::get('student-data',[AdminController::class,'student_data']);
 Route::get('/fetch-fees/{studentId}',[AdminController::class,'fetchfees']);
 Route::post('add-fees',[AdminController::class,'add_fees']);
 Route::post('update-fees',[AdminController::class,'update_fees']);
+Route::get('date-filter',[AdminController::class,'date_filter']);
 
+Route::get('/search', [AdminController::class,'searchRecords'])->name('search');
+Route::delete('/delete-student/{id}',[AdminController::class,'deleteStudent']);
+Route::delete('/delete-fee-record/{id}',[AdminController::class,'deleteFeeRecord']);
 
-Route::get('user_dashboard',[HomeController::class,'user_dashboard'])->name('user_dashboard');
+// Route::get('user_dashboard',[HomeController::class,'user_dashboard'])->name('user_dashboard');
 
 Route::get('login' ,[AdminController::class,'login'])->name('login');
 Route::get('register' ,[AdminController::class,'register'])->name('register');
 Route::post('admin-login',[LoginController::class,'admin_login'])->name('admin_login');
 Route::post('admin-register',[LoginController::class,'admin_register'])->name('admin_register');
 Route::get('logout',[loginController::class,'logout'])->name('logout');
+
+Route::get('user-home',[HomeController::class,'user_home'])->name('user_home');
 
 

@@ -19,7 +19,7 @@ class LoginController extends Controller
             $password = $request->password;
         $user = User::where('email', $email)->first();
         if($user == null){
-            return redirect()->back()->with('error', 'please check the email.');
+            return redirect()->route('main');
         }else {
             $hashed_pass = $user->password;
             $user_id=$user->id;
@@ -37,7 +37,7 @@ class LoginController extends Controller
                     
                 }
             }else{
-                return redirect()->back()->with('error','Password Or Email-Address is not correct.');
+                return redirect()->route('main');
             }
         }
     }

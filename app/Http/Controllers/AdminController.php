@@ -8,6 +8,7 @@ use App\Models\student;
 use App\Models\Fees;
 use Carbon\Carbon;
 use DateTime;
+use DB;
 class AdminController extends Controller
 {
     public function admin_pannel(){
@@ -64,6 +65,9 @@ class AdminController extends Controller
     }
 
     public function update_fees(Request $request){
+        if ($request->depositDateValue == null) {
+            return response()->json(['error' => 'Please Select A Valid Deposit Date ! Can Not Accept Null Value ']);
+        }
         $id = $request->depositIdValue;
         $deposit_date = $request->depositDateValue;
         $student_id = $request->currentStudentId;
@@ -94,4 +98,55 @@ class AdminController extends Controller
         return view('login.register');
     }
 
+    public function searchRecords(Request $request) {
+        $query = $request->input('query');
+        $results = student::leftJoin('fees', 'students.id', '=', 'fees.student_id')
+        ->select('students.id', 'students.name', 'students.age', 'students.class',  \DB::raw('DATE_FORMAT(MAX(fees.deposit_date), "%d/%m/%Y") as last_deposit_date'))
+        ->where('name', 'like', '%' . $query . '%')
+        ->orwhere('age', 'like', '%' . $query . '%')
+        ->orwhere('class', 'like', '%' . $query . '%')
+        ->groupBy('students.id', 'students.name', 'students.age', 'students.class')
+        ->get();
+        return response()->json(['results' => $results]);
+    }
+
+    public function deleteStudent($id) {
+        $studen_record = student::find($id);
+        if (!$studen_record) {
+            return response()->json(['error' => 'Student not found'], 404);
+        }
+        $fee_structure = Fees::where('student_id','=',$id)->get();
+        $studen_record->delete();
+        foreach ($fee_structure as $fee) {
+            $fee->delete();
+        }
+        return response()->json(['message' => 'Student deleted successfully']);
+    }
+
+    public function deleteFeeRecord($id) {
+        $fee_record = Fees::find($id);
+        if (!$fee_record) {
+            return response()->json(['error' => 'Fees Record not found'], 404);
+        }
+        $currentDate = Carbon::now();
+        $dueDate = Carbon::parse($fee_record->due_date);
+        if ($dueDate->month == $currentDate->subMonth()->month || $dueDate->year == $currentDate->subYear()->year) {
+            return response()->json(['message' => 'Cannot delete fee record with due date from last month or year']);
+        }
+        $fee_record->delete();
+        return response()->json(['message' => 'Fees Record is being deleted successfully']);
+    }
+
+
+    public function date_filter(Request $request) {
+        $student_id = $request->currentStudentId;
+        $selected_data = $request->selectedDate;    
+        $selected_date = Carbon::parse($selected_data);
+
+        $fees = Fees::where('student_id', $student_id)
+                ->whereYear('due_date', $selected_date->year)
+                ->whereMonth('due_date', $selected_date->month)
+                ->get();
+        return response()->json(['message' => 'Data Fetched successfully', 'fees' => $fees]); 
+    }
 }

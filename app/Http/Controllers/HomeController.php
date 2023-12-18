@@ -21,7 +21,7 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function user_dashboard()
+    public function user_home()
     {
         return view('users.user');
     }

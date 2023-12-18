@@ -18,8 +18,7 @@
  @include('admin_pannel.layouts.nav')
 
  @include('admin_pannel.layouts.aside')
-
-  <!-- Content Wrapper. Contains page content -->
+  <!-- Content Wrapper.Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -45,12 +44,20 @@
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Students Details</h3>
-                            <div class="card-tools">
+                            <div class="card-tools d-flex">
                                 <div class="input-group input-group-sm" style="width: 150px;">
                                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add_student">
                                        Add New Student
                                       </button>
                                 </div>
+                                <div class="input-group input-group-sm" style="width: 150px;">
+                                    <input type="text" name="table_search" class="form-control float-right" id="search" placeholder="Search" style="height: 38px;">
+                                    <div class="input-group-append">
+                                      <button type="submit" class="btn btn-default">
+                                        <i class="fas fa-search"></i>
+                                      </button>
+                                    </div>
+                                 </div>
                             </div>
                         </div>
                         <!-- /.card-header -->
@@ -62,7 +69,7 @@
                                 <th>Name</th>
                                 <th>Age</th>
                                 <th>Class</th>
-                                <th>Last Deposit</th>
+                                <th>Last Deposit<span style="font-weight: 400;font-size:smaller;">(dd/mm/yyyy)</span></th>
                                 <th>Actions</th>
                             </tr>
                             </thead>
@@ -79,55 +86,49 @@
         </div>
     </section>
   </div>
-
   <!-- Modal -->
-<div class="modal fade" id="add_student" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Add A New Student</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-            <div class="container mt-5">
-                <h2 class="mb-4">Student Information Form</h2>
+    <div class="modal fade" id="add_student" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Student Information Form</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <form action="{{route('student_details')}}" method="POST"  id="student_detail_form">
+                            @csrf
+                            <div class="form-group">
+                                <label for="name">Name:</label>
+                                <input type="text" class="form-control" name="name" id="name" placeholder="Enter Name" required>
+                            </div>
             
-                <form action="{{route('student_details')}}" method="POST"  id="student_detail_form">
-                    @csrf
-                    <div class="form-group">
-                        <label for="name">Name:</label>
-                        <input type="text" class="form-control" name="name" id="name" placeholder="Enter Name" required>
-                    </div>
+                            <div class="form-group">
+                                <label for="age">Age:</label>
+                                <input type="number" class="form-control" name="age" id="age" placeholder="Enter Age(in Years)" required>
+                            </div>
             
-                    <div class="form-group">
-                        <label for="age">Age:</label>
-                        <input type="number" class="form-control" name="age" id="age" placeholder="Enter Age(in Years)" required>
+                            <div class="form-group">
+                                <label for="class">Class:</label>
+                                <select name="class" id="class" class="form-control" required>
+                                    <option value="" selected disabled>Select Class</option>
+                                    @foreach ($classes as $item)
+                                    <option value="{{$item->classes}}">{{$item->classes}} Class</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </form>
                     </div>
-            
-                    <div class="form-group">
-                        <label for="class">Class:</label>
-                        <select name="class" id="class" class="form-control" required>
-                            <option value="" selected disabled>Select Class</option>
-                            @foreach ($classes as $item)
-                            <option value="{{$item->classes}}">{{$item->classes}} Class</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="student_details()">Add Record</button>
+                </div>
             </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-primary" onclick="student_details()">Add Record</button>
-        </div>
-      </div>
     </div>
-  </div>
-
-
-
   <!-- Fess Modal -->
     <div class="modal fade" id="studentfees" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
@@ -135,6 +136,10 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Fee Record of -:</h5>
                     <i class="fas fa-money-bill" style="position: relative; left: 20%; padding-top: 10px;" onclick="new_fess()" ></i>
+                    <div class="date_filter" style="position: relative; left:30%">
+                        <label for="due_on">Date Filter:</label>
+                        <input type="date" id="date_filter" onchange="date_filtration()">
+                    </div>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -143,11 +148,11 @@
                     <div class="form-row">
                         <div class="form-group col-md-3">
                             <label for="amount">Amount:</label>
-                            <input type="number" class="form-control" name="amount" value="" disabled>
+                            <input type="number" class="form-control" name="amount"  disabled>
                         </div>
                         <div class="form-group col-md-3">
                             <label for="due_on">Due Date:</label>
-                            <input type="date" class="form-control" name="due_on" value="" disabled>
+                            <input type="date" class="form-control" name="due_on" disabled>
                         </div>
                         <div class="form-group col-md-3">
                             <label for="deposit_on">Deposit Date:</label>
@@ -162,38 +167,35 @@
             </div>
         </div>
     </div>
-
     {{-- New Fees Model --}}
-        <div class="modal fade" id="new_fees_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">New Fess Modal</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="amount">Amount:</label>
-                                <input type="number" class="form-control" name="amount" placeholder="Enter The Fees Amount....  ">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="due_on">Due Date:</label>
-                                <input type="date" class="form-control" name="due_on">
-                            </div>
+    <div class="modal fade" id="new_fees_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">New Fess Modal</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="amount">Amount:</label>
+                            <input type="number" class="form-control" name="amount" placeholder="Enter The Fees Amount....  ">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="due_on">Due Date:</label>
+                            <input type="date" class="form-control" name="due_on">
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" onclick="add_fees()">Add Next Due</button>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="add_fees()">Add Next Due</button>
                 </div>
             </div>
         </div>
-
-
+    </div>
   @include('admin_pannel.layouts.footer')
 </div>
 @include('admin_pannel.layouts.scripts')
