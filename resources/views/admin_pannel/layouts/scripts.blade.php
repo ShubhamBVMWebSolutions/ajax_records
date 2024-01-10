@@ -40,7 +40,7 @@
             data: formData,
             dataType: 'json',
             success: function(response) {
-                alert(response.message); 
+                alert(response.message);
                 $('#student_detail_form')[0].reset();
                 $('#add_student').modal('hide');
                 fetchStudentData();
@@ -50,11 +50,11 @@
             }
         });
   }
-  
+
 
   function fetchStudentData() {
         $.ajax({
-            url: '/student-data', 
+            url: '/student-data',
             method: 'GET',
             dataType: 'json',
             success: function(data) {
@@ -98,12 +98,12 @@
         method:'GET',
         dataType:'json',
         success:function(response){
-          
+
           modal.find('.modal-body').empty();
           if (response.message === 'Data Fetched successfully' && response.fees.length > 0) {
             modal.find('.modal-title').text('Fee Record of -: ' + studentName + '');
             $.each(response.fees,function (index , fee) {
-             
+
               var feeDetails = '<div class="form-row">';
                feeDetails += '<input type="hidden" class="form-control" name="id" value="' + fee.id + '" >';
                feeDetails += '<div class="form-group col-md-3">';
@@ -126,7 +126,7 @@
                feeDetails += '<label for="checkbox">Delete:</label><br>';
                feeDetails += '<i class="fas fa-trash" title ="Delete Record" style="cursor: pointer; padding-left: 21px; padding-top: 10px;" onclick="deleteFeeRecord(' + fee.id + ')"></i>';
                feeDetails += '</div>';
-               feeDetails += '</div>'; 
+               feeDetails += '</div>';
                modal.find('.modal-body').append(feeDetails);
                modal.find('.toggle-switch').bootstrapToggle();
             });
@@ -155,7 +155,7 @@
                             }
                           },
                         error: function(error) {
-                        
+
                       }
                     });
                   });
@@ -163,11 +163,11 @@
             modal.find('.modal-title').text('Fee Record of -: ' + studentName + '');
             modal.modal('show');
           }else{
-            
+
           }
         },
         error :function(error){
-          
+
         }
       });
     }
@@ -177,7 +177,7 @@ function new_fess() {
     $('.toggle-switch').each(function() {
         if (!$(this).prop('checked')) {
             uncheckedCheckbox = true;
-            return false; 
+            return false;
         }
     });
 
@@ -217,7 +217,7 @@ function new_fess() {
             });
             $('#new_fees_model').modal('hide');
             openModal(currentStudentId,currentStudentName);
-            
+
           }
             },
       error: function(error) {
@@ -240,7 +240,7 @@ function new_fess() {
         error:function(error){
           console.error('Error Searching :',error);
         }
-       }); 
+       });
     });
     function displayResults(results) {
       var $tableBody = $('#student_details tbody')
@@ -261,7 +261,7 @@ function new_fess() {
       }else{
         $tableBody.append('<tr><td colspan="6" class="text-center">No Student Found</td></tr>');
       }
-    }   
+    }
   });
   function deleteRecord(id,name) {
     if (confirm('Are you sure you want to delete The Records Of :- ' + name + '?')) {
@@ -296,7 +296,7 @@ function new_fess() {
           console.error('Error occurred:', error);
           alert('An Error Occured! Please Try Again After Some Time ');
         }
-      }); 
+      });
     }
   }
 
@@ -316,7 +316,7 @@ function new_fess() {
         modal.find('.modal-body').empty();
         if (response.message === 'Data Fetched successfully' && response.fees.length > 0) {
             $.each(response.fees,function (index , fee) {
-             
+
               var feeDetails = '<div class="form-row">';
                feeDetails += '<input type="hidden" class="form-control" name="id" value="' + fee.id + '" >';
                feeDetails += '<div class="form-group col-md-3">';
@@ -339,7 +339,7 @@ function new_fess() {
                feeDetails += '<label for="checkbox">Delete:</label><br>';
                feeDetails += '<i class="fas fa-trash" title ="Delete Record" style="cursor: pointer; padding-left: 21px; padding-top: 10px;" onclick="deleteFeeRecord(' + fee.id + ')"></i>';
                feeDetails += '</div>';
-               feeDetails += '</div>'; 
+               feeDetails += '</div>';
                modal.find('.modal-body').append(feeDetails);
                modal.find('.toggle-switch').bootstrapToggle();
             });
@@ -368,7 +368,7 @@ function new_fess() {
                             }
                           },
                         error: function(error) {
-                        
+
                       }
                     });
                   });
